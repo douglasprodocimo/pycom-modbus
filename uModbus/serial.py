@@ -10,14 +10,9 @@ import machine
 
 class Serial:
 
-    def __init__(self, uart_id, baudrate=9600, data_bits=8, stop_bits=1, parity=None, pins=None, ctrl_pin=None):
+    def __init__(self, uart_id, baudrate=9600, data_bits=8, stop_bits=1, parity=None):
         self._uart = UART(uart_id, baudrate=baudrate, bits=data_bits, parity=parity, \
-                          stop=stop_bits, timeout_chars=2, pins=pins)
-        if ctrl_pin is not None:
-            self._ctrlPin = Pin(ctrl_pin, mode=Pin.OUT)
-        else:
-            self._ctrlPin = None
-
+                          stop=stop_bits)
         if baudrate <= 19200:
             self._t35chars = (3500000 * (data_bits + stop_bits + 2)) // baudrate
         else:
@@ -62,7 +57,7 @@ class Serial:
 
         for x in range(1, 40):
             if self._uart.any():
-                response.extend(self._uart.readall())
+                response.extend(self._uart.read())
                 # variable length function codes may require multiple reads
                 if self._exit_read(response):
                     break
