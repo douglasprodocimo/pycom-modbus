@@ -12,10 +12,6 @@ class Serial:
     def __init__(self, uart_id, baudrate=9600, data_bits=8, stop_bits=1, parity=None):
         self._uart = UART(uart_id, baudrate=baudrate, bits=data_bits, parity=parity, \
                           stop=stop_bits)
-        if baudrate <= 19200:
-            self._t35chars = (3500000 * (data_bits + stop_bits + 2)) // baudrate
-        else:
-            self._t35chars = 1750
 
     def _calculate_crc16(self, data):
         crc = 0xFFFF
@@ -88,15 +84,6 @@ class Serial:
 
         crc = self._calculate_crc16(serial_pdu)
         serial_pdu.extend(crc)
-
-        if self._ctrlPin:
-            self._ctrlPin(1)
-        self._uart.write(serial_pdu)
-        if self._ctrlPin:
-            while not self._uart.wait_tx_done(2):
-                machine.idle()
-            time.sleep_us(self._t35chars)
-            self._ctrlPin(0)
 
     def _send_receive(self, modbus_pdu, slave_addr, count):
         # flush the Rx FIFO
