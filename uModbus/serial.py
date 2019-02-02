@@ -3,7 +3,6 @@ import uModBus.const as Const
 from uModBus.common import Request
 from uModBus.common import ModbusException
 from machine import UART
-from machine import Pin
 import struct
 import time
 import machine
