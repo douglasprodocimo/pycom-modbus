@@ -19,7 +19,7 @@ modbus_obj = TCP(slave_ip)
 
 ######################### RTU SERIAL MODBUS #########################
 #uart_id = 0x01
-#modbus_obj = Serial(uart_id, pins=('P9', 'P10'))
+#modbus_obj = Serial(uart_id)
 
 ######################### READ COILS #########################
 #slave_addr=0x0A
